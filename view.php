@@ -12,27 +12,39 @@
     
         include('connectDb.php');
         $sql = "SELECT * FROM players ORDER BY id";
-        $result = $mysqli->set_charset("utf8"); //This line was made so we can set accents correctly in all of the data (ex.: Aurélio)
+        
+        //corrige problemas de acentuação
+        $result = $mysqli->set_charset("utf8"); 
+        
+        //verifica se o acesso ao DB foi bem sucedida
         if($result = $mysqli->query($sql))
         {
+            //verifica se há dados na tabela
             if($result->num_rows > 0)
             {
                 echo "<table border='1' cellpadding='10'>";
-                echo "<tr><th>ID</th><th>First name</th><th>Last Name</th></tr>";
+                echo "<tr><th>ID</th><th>First name</th><th>Last Name</th><th></th><th></th></tr>";
                 while ($row = $result->fetch_object())
                 {
                     echo "<tr>";
                     echo "<td>".$row->id."</td>";
                     echo "<td>".$row->firstname."</td>";
                     echo "<td>".$row->lastname."</td>";
+                    echo "<td><a href='records.php?id=".$row->id."'>Edit</a></td>";
+                    echo "<td><a href='delete.php?id=".$row->id."'>Delete</a></td>";
                     echo "</tr>";
                 }
                 echo "</table>";
-            } else
+            } 
+            //não há nada na tabela para ser exibido
+            else 
             {
                 echo "No results to display!";
             }
-        } else{ //if the query fails we get a msg error
+        } 
+        //neste caso ocorreu erro, logo exibe o erro
+        else
+        { 
             echo 'Error: '.$mysqli->error;
         };
 
@@ -40,7 +52,7 @@
         $mysqli->close();
     
     ?>
-
+    <a href="records.php">Add New Record</a>
     
 </body>
 </html>
